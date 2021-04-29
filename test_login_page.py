@@ -21,6 +21,8 @@ def test_guest_cant_sign_in_with_invalid_password(browser):
     page.sign_in_to_site(email, password, browser)
     page.should_be_message_about_wrong_password(browser)
 
+
+@pytest.mark.testing
 def test_guest_cant_register_with_invalid_sponsor_id(browser):
     link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
     page = LoginPage(browser, link)
@@ -30,4 +32,4 @@ def test_guest_cant_register_with_invalid_sponsor_id(browser):
     last_name = "Ivanov"
     email = "user10@example.com"
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
-    page.should_be_message_about_wrong_sponsor_id(browser)
+    page.should_be_message_about_wrong_sponsor_id(browser, sponsor_id)

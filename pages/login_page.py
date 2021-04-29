@@ -53,8 +53,16 @@ class LoginPage(BasePage):
         button_register.click()
         time.sleep(3)
 
-    def should_be_message_about_wrong_sponsor_id(self, browser):
+    def should_be_message_about_wrong_sponsor_id(self, browser, sponsor_id):
         self.should_be_message_in_the_lower_right_corner(browser)
-        self.message_should_be_about_wrong_sponsor_id(browser)
-        # дописать проверки
+        self.message_should_be_about_wrong_sponsor_id(browser, sponsor_id)
+
+    def should_be_message_in_the_lower_right_corner(self, browser):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name("v-api2-middleware"))
+        assert shadow_dom.find_element_by_css_selector("div>div.snotifyToast__inner"), "Сообщение в правом нижнем углу не появилось"
+
+    def message_should_be_about_wrong_sponsor_id(self, browser, sponsor_id):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name("v-api2-middleware"))
+        message_text = (shadow_dom.find_element_by_css_selector("div.snotifyToast__body")).text
+        assert message_text == f"Sponsor account with Id '{sponsor_id}' not exists", f"Появившееся сообщение - {message_text}"
 
