@@ -66,3 +66,19 @@ class LoginPage(BasePage):
         message_text = (shadow_dom.find_element_by_css_selector("div.snotifyToast__body")).text
         assert message_text == f"Sponsor account with Id '{sponsor_id}' not exists", f"Появившееся сообщение - {message_text}"
 
+    def should_be_message_email_already_exists(self, browser): # переписать
+        # shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name("v-api2-middleware"))
+        # message_text = (shadow_dom.find_element_by_css_selector("#formLogin>div>div.content-box-wrapper>div>strong")).text
+        # assert message_text != "Аккаунт создан", "Регистрация не должна проходить"
+        self.should_be_message_in_the_lower_right_corner(browser)
+        self.message_should_be_about_email_already_exists(browser)
+
+    def message_should_be_about_email_already_exists(self, browser): # переписать
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name("v-api2-middleware"))
+        message_text = (shadow_dom.find_element_by_css_selector("div.snotifyToast__body")).text
+        assert message_text == "Can not user create.", f"Появившееся сообщение - {message_text}"
+
+    def should_be_message_about_registration_confirmation_via_email(self, browser):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name("v-api2-middleware"))
+        message_text = (shadow_dom.find_element_by_css_selector("#formLogin>div>div.content-box-wrapper>div>strong")).text
+        assert message_text == "Аккаунт создан", "Регистрация не была пройдена"
