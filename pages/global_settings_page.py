@@ -13,11 +13,11 @@ class GlobalSettingsPage(BasePage):
 
     def select_login_type__id_as_login(self):
         select = Select(self.browser.find_element_by_css_selector("#globalsettingsform-login_type"))
-        select.select_by_visible_text("ID As Login")  # выбор элемента с текстом "ID As Login"
+        select.select_by_value("2")  # выбор элемента с текстом "ID As Login"
 
     def select_password_creation_type__by_user(self):
         select = Select(self.browser.find_element_by_css_selector("#globalsettingsform-password_creation_type"))
-        select.select_by_visible_text("By User")  # выбор элемента с текстом "By User"
+        select.select_by_value("1")  # выбор элемента с текстом "By User"
 
     def save_changes_to_global_settings(self):
         button_submit = self.browser.find_element_by_css_selector("#w0>div.panel-footer>div>div>button.btn.btn-success")

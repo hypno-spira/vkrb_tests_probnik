@@ -125,6 +125,6 @@ class LoginPage(BasePage):
         button_register.click()
         time.sleep(3)
 
-    def dashboard_should_be_open(self):  # придумать другую проверку
+    def dashboard_should_be_open(self):  # придумать другую проверку, т.к. при смене языка упадет
         dashboard_label = self.browser.find_element_by_css_selector("#page-title > h2")
         assert dashboard_label.text == "DASHBOARD", f"заголовок h2 не найден или найден с текстом {dashboard_label.text}"

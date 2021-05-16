@@ -81,7 +81,7 @@ def test_id_as_login(browser):
     login_page.open()
     login_page.should_be_added_fields_password_and_confirm_password(browser)
     # login_page.email_field_is_not_present(browser) - дописать рабочий метод или удалить
-    sponsor_id, first_name, last_name, password = "2", "Anton", "Petrov", "AwsEdcjdigY65Hfuf764"
+    sponsor_id, first_name, last_name, password = "2", "Antony", "Petrov", "AwsEgyudcjdigY65Hfuf764"
     login_page.success_registration(sponsor_id, first_name, last_name, password, browser)
     time.sleep(10)  # без явного ожидания страница не успевает загрузиться и тест падает
     login_page.dashboard_should_be_open()
