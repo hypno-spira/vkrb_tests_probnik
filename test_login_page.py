@@ -4,8 +4,13 @@ from .pages.profile_field_settings_page import ProfileFieldSettingsPage
 from .pages.admin_personal_account_settings_page import AdminPersonalAccountSettingsPage
 import pytest
 import time
+import allure
+from allure_commons.types import AttachmentType
 
 
+@allure.feature('authorization')
+@allure.story("Авторизация пользователя с корректными данными")
+@allure.severity("critical")
 def test_guest_can_sign_in_with_valid_data(browser):  # 1. авторизация с корректными данными
     link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
     page = LoginPage(browser, link)
@@ -15,15 +20,25 @@ def test_guest_can_sign_in_with_valid_data(browser):  # 1. авторизаци�
     page.should_be_username_logo_in_the_header(browser)
 
 
+@pytest.mark.testing
+@allure.feature('authorization')
+@allure.story("Авторизация пользователя с неверным паролем")
+@allure.severity("critical")
 def test_guest_cant_sign_in_with_invalid_password(browser):  # 2. авторизация с неверным паролем
     link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
     page = LoginPage(browser, link)
     page.open()
     email, password = "user3@example.com", "password_012345"
     page.sign_in_to_site(email, password, browser)
+    with allure.step("Делаем скриншот"):
+        allure.attach(browser.get_screenshot_as_png(), name="Screenshot wrong password",
+                      attachment_type=AttachmentType.PNG)
     page.should_be_message_about_wrong_password(browser)
 
 
+@allure.feature('registration')
+@allure.story("Регистрация пользователя с неверным sponsor id")
+@allure.severity("critical")
 def test_guest_cant_register_with_invalid_sponsor_id(browser):  # 3. регистрация с неверным спонсор айди
     link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
     page = LoginPage(browser, link)
@@ -33,6 +48,9 @@ def test_guest_cant_register_with_invalid_sponsor_id(browser):  # 3. регис�
     page.should_be_message_about_wrong_sponsor_id(browser, sponsor_id)
 
 
+@allure.feature('registration')
+@allure.story("Регистрация пользователя с уже существующим email")
+@allure.severity("critical")
 def test_guest_cant_register_with_an_existing_email(browser):  # 4. регистрация с уже сущ. емейлом
     link = "https://dev-vkhvorostov.onlineoffice.pro/ru-RU"
     page = LoginPage(browser, link)
@@ -42,6 +60,9 @@ def test_guest_cant_register_with_an_existing_email(browser):  # 4. регист
     page.should_be_message_email_already_exists(browser)  # доделать
 
 
+@allure.feature('registration')
+@allure.story("Успешная регистрация пользователя")
+@allure.severity("critical")
 def test_guest_can_register_with_valid_data(browser):  # 5. успешная регистрация
     link = "https://dev-vkhvorostov.onlineoffice.pro/ru-RU"
     page = LoginPage(browser, link)
@@ -51,7 +72,9 @@ def test_guest_can_register_with_valid_data(browser):  # 5. успешная р�
     page.should_be_message_about_registration_confirmation_via_email(browser)  # доделать
 
 
-@pytest.mark.testing
+@allure.feature("authorization")
+@allure.story("Тест ID as Login")
+@allure.severity("critical")
 def test_id_as_login(browser):
     link = "https://dev-vkhvorostov.mlmsoft.com/admin/settings/global-settings"
     global_settings_page = GlobalSettingsPage(browser, link)
