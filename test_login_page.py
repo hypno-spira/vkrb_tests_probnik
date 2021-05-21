@@ -20,7 +20,6 @@ def test_guest_can_sign_in_with_valid_data(browser):  # 1. авторизаци�
     page.should_be_username_logo_in_the_header(browser)
 
 
-@pytest.mark.testing
 @allure.feature('authorization')
 @allure.story("Авторизация пользователя с неверным паролем")
 @allure.severity("critical")
@@ -48,6 +47,7 @@ def test_guest_cant_register_with_invalid_sponsor_id(browser):  # 3. регис�
     page.should_be_message_about_wrong_sponsor_id(browser, sponsor_id)
 
 
+@pytest.mark.testing
 @allure.feature('registration')
 @allure.story("Регистрация пользователя с уже существующим email")
 @allure.severity("critical")
@@ -55,7 +55,7 @@ def test_guest_cant_register_with_an_existing_email(browser):  # 4. регист
     link = "https://dev-vkhvorostov.onlineoffice.pro/ru-RU"
     page = LoginPage(browser, link)
     page.open()
-    sponsor_id, first_name, last_name, email = "2", "Iva", "Ivanov", "user4@example.com"
+    sponsor_id, first_name, last_name, email = "2", "Ivvvan", "Ivanov", "user4@example.com"
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
     page.should_be_message_email_already_exists(browser)  # доделать
 
