@@ -6,6 +6,8 @@ import re
 
 
 class OnlineOrderPage(BasePage):
+    order_id = 1
+
     def expand_shadow_element(self, element):
         shadow_root = self.browser.execute_script('return arguments[0].shadowRoot', element)
         return shadow_root
@@ -59,4 +61,85 @@ class OnlineOrderPage(BasePage):
         price = float(re.search(r'\d*\.\d+|\d+', text).group(0))
         return price
 
+    def remember_the_last_order_number(self, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_HISTORY_TAG))
+        time.sleep(3)
+        last_order_id = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.LAST_ORDER_ID)).text
+        order_id = int(last_order_id)
+
+        online_order_link = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.ONLINE_ORDER_LINK)
+        online_order_link.click()
+        time.sleep(1)
+        return order_id
+
+    def ordering(self, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_TAG))
+        cart_button = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.CART_BUTTON)
+        cart_button.click()
+        time.sleep(3)
+        button_to_2_step = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BUTTON_F1T2_STEP)
+        #browser.execute_script("return arguments[0].scrollIntoView(true);", button_to_2_step)
+        button_to_2_step.click()
+        time.sleep(3)
+        address_input = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.ADDRESS)
+        address_input.send_keys("Новосибирская обл, г Новосибирск, ул Новосибирская, д 999, кв 999")  # ?
+        #pick_up_radio = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.PICK_UP_RADIO)
+        #browser.execute_script("return arguments[0].scrollIntoView(true);", pick_up_radio)
+        #pick_up_radio.click()
+        button_to_3_step = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BUTTON_F2T3_STEP)
+        button_to_3_step.click()
+        time.sleep(3)
+        test_gateway_radio = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.TEST_GATEWAY_RADIO)
+        #browser.execute_script("return arguments[0].scrollIntoView(true);", test_gateway_radio)
+        test_gateway_radio.click()
+        time.sleep(2)
+        agree_checkbox = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.AGREE_CHECKBOX)
+        #browser.execute_script("return arguments[0].scrollIntoView(true);", agree_checkbox)
+        agree_checkbox.click()
+        proceed_to_check_out = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.PROCEED_TO_CHECK_OUT)
+        proceed_to_check_out.click()
+        time.sleep(3)
+
+    def successful_payment_in_test_gateway(self):
+        successful_payment_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.SUCCESSFUL_PAYMENT_BUTTON)
+        successful_payment_button.click()
+        time.sleep(2)
+        successful_payment_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.RETURN_BUTTON)
+        successful_payment_button.click()
+        time.sleep(6)
+
+    def should_be_green_message_after_purchase(self, browser):
+        self.should_be_message_in_the_lower_right_corner(browser)
+        self.message_should_contain_a_successful_icon(browser)
+        order_history_link = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.ORDER_HISTORY_LINK)
+        order_history_link.click()
+        time.sleep(2)
+
+    def should_be_message_in_the_lower_right_corner(self, browser):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
+        assert shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BOTTOM_RIGHT_MESSAGE), "Сообщение в правом нижнем углу не появилось"
+
+    def message_should_contain_a_successful_icon(self, browser):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
+        assert shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.ICON_SUCCESS), f"иконка не отобразилась"
+
+    def should_be_new_order_in_order_history(self, last_order_id, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_HISTORY_TAG))
+        time.sleep(3)
+        new_order_id = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.LAST_ORDER_ID)).text
+        new_order_id = int(new_order_id)
+        self.new_id_should_be_greater_then_last_id(new_order_id, last_order_id)
+        return new_order_id
+
+    def new_id_should_be_greater_then_last_id(self, new_order_id, last_order_id):
+        assert new_order_id > last_order_id, f"новая запись не добавлена, id старого заказа - {last_order_id}, нового - {new_order_id}"
+
+    def new_order_should_be_successful(self, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_HISTORY_TAG))
+        new_order_status = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.NEW_ORDER_STATUS)).text
+        assert new_order_status == "DONE", f"ожидался статус заказа done, встречен - {new_order_status}"
 

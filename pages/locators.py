@@ -58,6 +58,7 @@ class AdminMonarchSettingsLocators(BasePage):
 
 class OnlineOrderPageLocators(BasePage):
     ONLINE_ORDER_TAG = "v-online-order"
+    ONLINE_ORDER_HISTORY_TAG = "v-online-order-history"
     BUTTON_1 = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(1) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > button"
     BUTTON_2 = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(2) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > button"
     BUTTON_3 = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(3) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > button"
@@ -67,6 +68,26 @@ class OnlineOrderPageLocators(BasePage):
     PRODUCT_3_PRICE = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(3) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > p.text-sm.text-grey-darker.mb-2.product-price"
     CART_BUTTON = "div > button > span > svg"
     CART_PRICE = "#step-1 > div > div.mt-6.mx-auto.ml-lg-0.ml-xl-0 > div.content-box.radius-all-6 > div > div:nth-child(2) > div > h1"
+    BUTTON_F1T2_STEP = "#step-1 > div > div.mt-6.mx-auto.ml-lg-0.ml-xl-0 > div.row > div:nth-child(2) > button"
+    ADDRESS = "#step-2 > div > div:nth-child(1) > div:nth-child(1) > div > div.checkout-address > input"
+    PICK_UP_RADIO = "#__BVID__169 > div:nth-child(2) > label"
+    BUTTON_F2T3_STEP = "#step-2 > div > div.mt-6.mx-auto.ml-lg-0.ml-xl-0 > div.row > div:nth-child(2) > button"
+    TEST_GATEWAY_RADIO = "#radio-group-1 > div:nth-child(4) > label"
+    AGREE_CHECKBOX = "div.custom-control.custom-checkbox"
+    PROCEED_TO_CHECK_OUT = "#step-3 > div > div.mt-6.mx-auto.ml-lg-0.ml-xl-0 > div.row > div:nth-child(2) > button"
+    SUCCESSFUL_PAYMENT_BUTTON = "body > div > form > button.btn.btn-primary"
+    RETURN_BUTTON = "body > div > form > button.btn.btn-secondary"
+    BOTTOM_RIGHT_MESSAGE = "div>div.snotifyToast__inner"
+    ICON_SUCCESS = ".snotify-icon.snotify-icon--success"
+    LAST_ORDER_ID = "tr:nth-child(1) > td:nth-child(1)"
+    ONLINE_ORDER_LINK = "#sidebar-menu > li:nth-child(6) > a"
+    NEW_ORDER_STATUS = "#__BVID__20 > tbody > tr:nth-child(1) > td:nth-child(5) > span"
+    ORDER_HISTORY_LINK = "#sidebar-menu > li:nth-child(7) > a"
+
+
+class AdminInvoicesPageLocators(BasePage):
+    ORDER_ID_IN_THE_FIRST_LINE = "#invoice-grid-container > table > tbody > tr:nth-child(1) > td:nth-child(1) > a"
+    STATUS_IN_THE_FIRST_LINE = "#invoice-grid-container > table > tbody > tr:nth-child(1) > td:nth-child(5)"
 
 
 

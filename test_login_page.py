@@ -112,13 +112,3 @@ def test_id_as_login(browser):
     time.sleep(3)
 
 
-@pytest.mark.testing
-def test_quantity_and_total_price_of_the_goods_in_the_cart(browser):
-    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US/order/online-order"
-    online_order_page = OnlineOrderPage(browser, link)
-    online_order_page.open()
-    email, password = "user3@example.com", "password_0"
-    online_order_page.sign_in(email, password, browser)
-    online_order_page.add_three_items_to_cart(browser)
-    online_order_page.should_be_3_on_the_cart_icon(browser)
-    online_order_page.should_be_correct_total_price_in_the_cart(browser)
