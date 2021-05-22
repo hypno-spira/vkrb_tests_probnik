@@ -2,6 +2,7 @@ from .pages.login_page import LoginPage
 from .pages.global_settings_page import GlobalSettingsPage
 from .pages.profile_field_settings_page import ProfileFieldSettingsPage
 from .pages.admin_personal_account_settings_page import AdminPersonalAccountSettingsPage
+from .pages.online_order_page import OnlineOrderPage
 import pytest
 import time
 import allure
@@ -47,7 +48,7 @@ def test_guest_cant_register_with_invalid_sponsor_id(browser):  # 3. регис�
     page.should_be_message_about_wrong_sponsor_id(browser, sponsor_id)
 
 
-@pytest.mark.testing
+
 @allure.feature('registration')
 @allure.story("Регистрация пользователя с уже существующим email")
 @allure.severity("critical")
@@ -109,3 +110,15 @@ def test_id_as_login(browser):
     time.sleep(10)  # без явного ожидания страница не успевает загрузиться и тест падает
     login_page.dashboard_should_be_open()
     time.sleep(3)
+
+
+@pytest.mark.testing
+def test_quantity_and_total_price_of_the_goods_in_the_cart(browser):
+    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US/order/online-order"
+    online_order_page = OnlineOrderPage(browser, link)
+    online_order_page.open()
+    email, password = "user3@example.com", "password_0"
+    online_order_page.sign_in(email, password, browser)
+    online_order_page.add_three_items_to_cart(browser)
+    online_order_page.should_be_3_on_the_cart_icon(browser)
+    online_order_page.should_be_correct_total_price_in_the_cart(browser)

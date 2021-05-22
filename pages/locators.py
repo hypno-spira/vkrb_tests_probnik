@@ -55,3 +55,18 @@ class AdminMonarchSettingsLocators(BasePage):
     DIV_ACTIVE = "#tab-style_tab\.core_tab\.registration_tab3 > div > div:nth-child(8) > div.form-data.block.size-2-3 > div > div > div.selectize-input.items.has-options.full.has-items > input[type=select-one]"
     SAVE_BUTTON = "#titlebar > div > button"
 
+
+class OnlineOrderPageLocators(BasePage):
+    ONLINE_ORDER_TAG = "v-online-order"
+    BUTTON_1 = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(1) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > button"
+    BUTTON_2 = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(2) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > button"
+    BUTTON_3 = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(3) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > button"
+    QUANTITY = "div > button > span > p"
+    PRODUCT_1_PRICE = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(1) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > p.text-sm.text-grey-darker.mb-2.product-price"
+    PRODUCT_2_PRICE = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(2) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > p.text-sm.text-grey-darker.mb-2.product-price"
+    PRODUCT_3_PRICE = "#app > div > div.body > div > div > div > div > div.flex.flex-wrap.overflow-y-hidden > div:nth-child(3) > div > div.shadow-lg.rounded-lg.overflow-hidden.bg-white > div.p-3 > p.text-sm.text-grey-darker.mb-2.product-price"
+    CART_BUTTON = "div > button > span > svg"
+    CART_PRICE = "#step-1 > div > div.mt-6.mx-auto.ml-lg-0.ml-xl-0 > div.content-box.radius-all-6 > div > div:nth-child(2) > div > h1"
+
+
+
