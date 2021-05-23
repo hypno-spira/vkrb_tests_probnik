@@ -106,8 +106,8 @@ class OnlineOrderPage(BasePage):
         successful_payment_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.SUCCESSFUL_PAYMENT_BUTTON)
         successful_payment_button.click()
         time.sleep(2)
-        successful_payment_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.RETURN_BUTTON)
-        successful_payment_button.click()
+        return_payment_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.RETURN_BUTTON)
+        return_payment_button.click()
         time.sleep(6)
 
     def should_be_green_message_after_purchase(self, browser):
@@ -141,5 +141,34 @@ class OnlineOrderPage(BasePage):
         shadow_dom = self.expand_shadow_element(
             browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_HISTORY_TAG))
         new_order_status = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.NEW_ORDER_STATUS)).text
-        assert new_order_status == "DONE", f"ожидался статус заказа done, встречен - {new_order_status}"
+        assert new_order_status == "DONE", f"ожидался статус заказа DONE, встречен - {new_order_status}"
+
+    def unsuccessful_payment_in_test_gateway(self):
+        unsuccessful_payment_checkbox = self.browser.find_element_by_css_selector(
+            OnlineOrderPageLocators.UNSUCCESSFUL_PAYMENT_CHECKBOX)
+        unsuccessful_payment_checkbox.click()
+        successful_payment_button = self.browser.find_element_by_css_selector(
+            OnlineOrderPageLocators.SUCCESSFUL_PAYMENT_BUTTON)
+        successful_payment_button.click()
+        time.sleep(1)
+        return_payment_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.RETURN_BUTTON)
+        return_payment_button.click()
+        time.sleep(6)
+
+    def should_be_yellow_message_after_purchase(self, browser):
+        self.should_be_message_in_the_lower_right_corner(browser)
+        self.message_should_contain_a_warning_icon(browser)
+        order_history_link = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.ORDER_HISTORY_LINK)
+        order_history_link.click()
+        time.sleep(2)
+
+    def message_should_contain_a_warning_icon(self, browser):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
+        assert shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.ICON_WARNING), f"иконка не отобразилась"
+
+    def new_order_should_be_unsuccessful(self, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_HISTORY_TAG))
+        new_order_status = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.NEW_ORDER_STATUS)).text
+        assert new_order_status == "ERROR", f"ожидался статус заказа ERROR, встречен - {new_order_status}"
 

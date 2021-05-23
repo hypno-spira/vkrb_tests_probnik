@@ -79,10 +79,12 @@ class OnlineOrderPageLocators(BasePage):
     RETURN_BUTTON = "body > div > form > button.btn.btn-secondary"
     BOTTOM_RIGHT_MESSAGE = "div>div.snotifyToast__inner"
     ICON_SUCCESS = ".snotify-icon.snotify-icon--success"
+    ICON_WARNING = ".snotify-icon.snotify-icon--warning"
     LAST_ORDER_ID = "tr:nth-child(1) > td:nth-child(1)"
     ONLINE_ORDER_LINK = "#sidebar-menu > li:nth-child(6) > a"
     NEW_ORDER_STATUS = "#__BVID__20 > tbody > tr:nth-child(1) > td:nth-child(5) > span"
     ORDER_HISTORY_LINK = "#sidebar-menu > li:nth-child(7) > a"
+    UNSUCCESSFUL_PAYMENT_CHECKBOX = "body > div > form > div > div:nth-child(2) > label"
 
 
 class AdminInvoicesPageLocators(BasePage):

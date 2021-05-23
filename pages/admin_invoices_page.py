@@ -24,3 +24,8 @@ class AdminInvoicesPage(BasePage):
         status_in_the_first_line = (self.browser.find_element_by_css_selector(AdminInvoicesPageLocators.STATUS_IN_THE_FIRST_LINE)).text
         assert status_in_the_first_line == "completed", f"ожидался статус заказа completed, встречен - {status_in_the_first_line}"
 
+    def new_order_should_be_unsuccessful(self):
+        status_in_the_first_line = (
+            self.browser.find_element_by_css_selector(AdminInvoicesPageLocators.STATUS_IN_THE_FIRST_LINE)).text
+        assert status_in_the_first_line == "payment-error", f"ожидался статус заказа payment-error, встречен - {status_in_the_first_line}"
+
