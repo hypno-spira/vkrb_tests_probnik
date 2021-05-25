@@ -15,6 +15,8 @@ class AuthorizationPageLocators(BasePage):
     AUTH_BUTTON = "#buttonLogin"
     ALERT_DANGER = "div.alert.alert-danger"
     SIGN_UP_BUTTON = "#formLogin>div>h3>span.header-buttons>a"
+    LANGUAGE_BUTTON = "#__BVID__20__BV_toggle_"
+    LANGUAGE_ENG = "#__BVID__20 > ul > li:nth-child(1) > a"
 
 
 class DashboardPageLocators(BasePage):
@@ -85,6 +87,14 @@ class OnlineOrderPageLocators(BasePage):
     NEW_ORDER_STATUS = "#__BVID__20 > tbody > tr:nth-child(1) > td:nth-child(5) > span"
     ORDER_HISTORY_LINK = "#sidebar-menu > li:nth-child(7) > a"
     UNSUCCESSFUL_PAYMENT_CHECKBOX = "body > div > form > div > div:nth-child(2) > label"
+    TRANSFER_WALLET_TAG = "v-account-to-account"
+    BONUS_WALLET = "div > div > div.plan-price"
+    RECIPIENT_INPUT = "#input-search"
+    RECIPIENT_FIRST_LINE = "#__BVID__27 > tbody > tr:nth-child(1)"
+    AMOUNT_TO_TRANSFER_INPUT = "#id_amount_input"
+    BUTTON_SUBMIT = "div > div > div.panel > div > form > div.button-pane.mrg20T > button.btn.btn-primary"
+    LOGOUT_TAB = "#sidebar-menu > li.no-menu > span > a"
+
 
 
 class AdminInvoicesPageLocators(BasePage):

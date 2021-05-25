@@ -10,7 +10,7 @@ import allure
 from allure_commons.types import AttachmentType
 
 
-
+@pytest.mark.testing
 def test_quantity_and_total_price_of_the_goods_in_the_cart(browser):
     link = "https://dev-vkhvorostov.onlineoffice.pro/en-US/order/online-order"
     online_order_page = OnlineOrderPage(browser, link)
@@ -43,7 +43,7 @@ def test_successful_purchase(browser):
     invoices_page.new_order_should_be_in_first_line(new_order_id)
     invoices_page.new_order_should_be_successful()
 
-@pytest.mark.testing
+
 def test_unsuccessful_purchase(browser):
     link = "https://dev-vkhvorostov.onlineoffice.pro/en-US/order/order-history"
     online_order_page = OnlineOrderPage(browser, link)
@@ -64,6 +64,27 @@ def test_unsuccessful_purchase(browser):
     invoices_page.sign_in(email, password)
     invoices_page.new_order_should_be_in_first_line(new_order_id)
     invoices_page.new_order_should_be_unsuccessful()
+
+
+@pytest.mark.testing
+def test_transfer_wallet(browser):
+    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US/wallet/my-wallet-transfer"
+    online_order_page = OnlineOrderPage(browser, link)
+    online_order_page.open()
+    email1, email2, password = "user3@example.com", "user5@example.com", "password_0"
+    online_order_page.sign_in(email2, password, browser)
+    recipient_bonus_wallet_before_transfer = online_order_page.remember_bonus_wallet_before_transfer(browser)
+    #print(recipient_bonus_wallet_before_transfer)
+    online_order_page.logout(browser)
+    online_order_page.sign_in(email1, password, browser)
+    sender_bonus_wallet_before_transfer = online_order_page.remember_bonus_wallet_before_transfer(browser)
+    online_order_page.making_a_transfer(browser)
+    online_order_page.should_be_green_message_after_transfer(browser)
+    online_order_page.sender_bonus_wallet_should_be_less_after_transfer(sender_bonus_wallet_before_transfer, browser)
+    online_order_page.logout(browser)
+    online_order_page.sign_in(email2, password, browser)
+    online_order_page.recipient_bonus_wallet_should_be_more_after_transfer(recipient_bonus_wallet_before_transfer, browser)
+
 
 
 

@@ -58,7 +58,8 @@ class OnlineOrderPage(BasePage):
         assert total_price_of_items == total_price_in_the_cart, f"Суммы не совпадают, общая сумма товаров = {total_price_of_items}, сумма товаров в корзине = {total_price_in_the_cart}"
 
     def price_text_to_float(self, text):
-        price = float(re.search(r'\d*\.\d+|\d+', text).group(0))
+        price = float("".join(filter(lambda d: str.isdigit(d) or d == '.', text)))
+        #price = float(re.search(r'\d*\.\d+|\d+', text).group(0))
         return price
 
     def remember_the_last_order_number(self, browser):
@@ -118,10 +119,12 @@ class OnlineOrderPage(BasePage):
         time.sleep(2)
 
     def should_be_message_in_the_lower_right_corner(self, browser):
+        browser.implicitly_wait(5)
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         assert shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BOTTOM_RIGHT_MESSAGE), "Сообщение в правом нижнем углу не появилось"
 
     def message_should_contain_a_successful_icon(self, browser):
+        browser.implicitly_wait(5)
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         assert shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.ICON_SUCCESS), f"иконка не отобразилась"
 
@@ -171,4 +174,80 @@ class OnlineOrderPage(BasePage):
             browser.find_element_by_tag_name(OnlineOrderPageLocators.ONLINE_ORDER_HISTORY_TAG))
         new_order_status = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.NEW_ORDER_STATUS)).text
         assert new_order_status == "ERROR", f"ожидался статус заказа ERROR, встречен - {new_order_status}"
+
+    def remember_bonus_wallet_before_transfer(self, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.TRANSFER_WALLET_TAG))
+        bonus_wallet_text = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BONUS_WALLET)).text
+        bonus_wallet = self.price_text_to_float(bonus_wallet_text)
+        #bonus_wallet = float(bonus_wallet_text)
+        time.sleep(3)
+        return bonus_wallet
+
+    def making_a_transfer(self, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.TRANSFER_WALLET_TAG))
+        recipient = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.RECIPIENT_INPUT)
+        recipient.send_keys("000000005")
+        time.sleep(1)
+        recipient_first_line = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.RECIPIENT_FIRST_LINE)
+        recipient_first_line.click()
+        time.sleep(1)
+        amount_to_transfer = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.AMOUNT_TO_TRANSFER_INPUT)
+        amount_to_transfer.send_keys("1")
+        submit_button = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BUTTON_SUBMIT)
+        submit_button.click()
+        time.sleep(1)
+
+    def should_be_green_message_after_transfer(self, browser):
+
+        self.should_be_message_in_the_lower_right_corner(browser)
+        self.message_should_contain_a_successful_icon(browser)
+
+    def sender_bonus_wallet_should_be_less_after_transfer(self, sender_bonus_wallet_before_transfer, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.TRANSFER_WALLET_TAG))
+        bonus_wallet_text = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BONUS_WALLET)).text
+        bonus_wallet = self.price_text_to_float(bonus_wallet_text)
+        assert sender_bonus_wallet_before_transfer - 1 == bonus_wallet, f"сумма не списалась или списалась неверно, счет до перевода = {sender_bonus_wallet_before_transfer}, после = {bonus_wallet}"
+
+    def logout(self, browser):
+        logout_button = self.browser.find_element_by_css_selector(OnlineOrderPageLocators.LOGOUT_TAB)
+        logout_button.click()
+        time.sleep(5)
+        #browser.implicitly_wait(5)
+        link = "https://dev-vkhvorostov.onlineoffice.pro/en-US/wallet/my-wallet-transfer"
+        online_order_page = OnlineOrderPage(browser, link)
+        online_order_page.open()
+        #self.clear_input(browser)
+        #self.change_language(browser)
+
+    def clear_input(self, browser):
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
+        email_input = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.AUTH_EMAIL)
+
+        password_input = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.AUTH_PASSWORD)
+        password_input.clear()
+        email_input.clear()
+        time.sleep(3)
+
+    def change_language(self, browser):
+        browser.implicitly_wait(5)
+        shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
+        lang_button = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.LANGUAGE_BUTTON)
+        lang_button.click()
+        time.sleep(1)
+        lang_eng = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.LANGUAGE_ENG)
+        lang_eng.click()
+
+
+    def recipient_bonus_wallet_should_be_more_after_transfer(self, recipient_bonus_wallet_before_transfer, browser):
+        shadow_dom = self.expand_shadow_element(
+            browser.find_element_by_tag_name(OnlineOrderPageLocators.TRANSFER_WALLET_TAG))
+        bonus_wallet_text = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.BONUS_WALLET)).text
+        bonus_wallet = self.price_text_to_float(bonus_wallet_text)
+        assert recipient_bonus_wallet_before_transfer + 1 == bonus_wallet, f"сумма не пришла или пришла неверно, счет до перевода = {recipient_bonus_wallet_before_transfer}, после = {bonus_wallet}"
+
+
+
 
