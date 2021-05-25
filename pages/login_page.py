@@ -16,7 +16,7 @@ class LoginPage(BasePage):
         shadow_root = self.browser.execute_script('return arguments[0].shadowRoot', element)
         return shadow_root
 
-    def sign_in_to_site(self, email, password, browser):  # авторизация - верные данные
+    def sign_in_to_site(self, email, password, browser):  # авторизация
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         email_input = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.AUTH_EMAIL)
         password_input = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.AUTH_PASSWORD)
@@ -24,12 +24,14 @@ class LoginPage(BasePage):
         password_input.send_keys(password)
         button = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.AUTH_BUTTON)
         button.click()
-        time.sleep(3)
+        time.sleep(2)
 
-    def should_be_username_logo_in_the_header(self, browser):  # отображение имени Lesa Miller в шапке
-        shadow_dom1 = self.expand_shadow_element(browser.find_element_by_tag_name(DashboardPageLocators.SHADOW_TAG))
-        username = (shadow_dom1.find_element_by_css_selector(DashboardPageLocators.USERNAME_ON_HEADER)).text
-        assert username == "Lesa Miller", f"В шапке либо отсутствует, либо другое имя пользователя - {username} "
+    # def should_be_username_logo_in_the_header(self, browser):  # отображение имени Lesa Miller в шапке
+    #     shadow_dom1 = self.expand_shadow_element(browser.find_element_by_tag_name(DashboardPageLocators.SHADOW_TAG))
+    #     browser.implicitly_wait(10)
+    #     self.dashboard_should_be_open()
+    #     username = (shadow_dom1.find_element_by_css_selector(DashboardPageLocators.USERNAME_ON_HEADER)).text
+    #     assert username == "Lesa Miller", f"В шапке либо отсутствует, либо другое имя пользователя - {username} "
 
     def should_be_message_about_wrong_password(self, browser):  # появление сообщения - неверный пароль
         self.should_be_message_under_sign_in_button(browser)
@@ -39,16 +41,16 @@ class LoginPage(BasePage):
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         assert shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.ALERT_DANGER), "Сообщение не появилось"
 
-    def message_should_be_about_wrong_password(self, browser):  # сообщение о неверном пароле?
+    def message_should_be_about_wrong_password(self, browser):  # сообщение о неверном пароле
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         message_text = (shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.ALERT_DANGER)).text
         assert message_text == "Wrong password", f"Появившееся сообщение - {message_text}"
 
-    def register_on_the_site(self, sponsor_id, first_name, last_name, email, browser):
+    def register_on_the_site(self, sponsor_id, first_name, last_name, email, browser):  # регистрация
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         button_sign_up = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.SIGN_UP_BUTTON)
         button_sign_up.click()
-        time.sleep(3)
+        time.sleep(2)
         sponsor_id_input = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.SPONSOR_ID)
         first_name_input = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.FIRST_NAME)
         last_name_input = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.LAST_NAME)
@@ -59,37 +61,40 @@ class LoginPage(BasePage):
         email_input.send_keys(email)
         button_register = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.REGISTER_BUTTON)
         button_register.click()
-        time.sleep(3)
+        time.sleep(2)
 
-    def should_be_message_about_wrong_sponsor_id(self, browser, sponsor_id):
+    def should_be_message_about_wrong_sponsor_id(self, browser, sponsor_id):  # поиск сообщения о неверном sponsor id
+        time.sleep(2)
         self.should_be_message_in_the_lower_right_corner(browser)
         self.message_should_be_about_wrong_sponsor_id(browser, sponsor_id)
 
-    def should_be_message_in_the_lower_right_corner(self, browser):
+    def should_be_message_in_the_lower_right_corner(self, browser):  # поиск сообщения
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         assert shadow_dom.find_element_by_css_selector(RegistrationPageLocators.BOTTOM_RIGHT_MESSAGE), "Сообщение в правом нижнем углу не появилось"
 
-    def message_should_be_about_wrong_sponsor_id(self, browser, sponsor_id):
+    def message_should_be_about_wrong_sponsor_id(self, browser, sponsor_id):  # сообщение должно быть о неверном sponsor id
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         message_text = (shadow_dom.find_element_by_css_selector(RegistrationPageLocators.BOTTOM_RIGHT_MESSAGE_TEXT)).text
         assert message_text == f"Sponsor account with Id '{sponsor_id}' not exists", f"Появившееся сообщение - {message_text}"
 
-    def should_be_message_email_already_exists(self, browser):  # переписать
+    def should_be_message_email_already_exists(self, browser):  # поиск сообщения об уже сущ. email
+        time.sleep(2)
         self.should_be_message_in_the_lower_right_corner(browser)
         self.message_should_be_about_email_already_exists(browser)
 
-    def message_should_be_about_email_already_exists(self, browser):  # переписать
+    def message_should_be_about_email_already_exists(self, browser):  # сообщение должно быть об уже сущ. email
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         message_text = (shadow_dom.find_element_by_css_selector(RegistrationPageLocators.BOTTOM_RIGHT_MESSAGE_TEXT)).text
         assert message_text == "Can not user create." or message_text == "User already exists", f"Появившееся сообщение - {message_text}"
 
-    def should_be_message_about_registration_confirmation_via_email(self, browser):
+    def should_be_message_about_registration_confirmation_via_email(self, browser):  # поиск сообщения об успешной регистрации
+        time.sleep(2)
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         message_text = (
             shadow_dom.find_element_by_css_selector(RegistrationPageLocators.CONFIRM_MESSAGE)).text
-        assert message_text == "Аккаунт создан", "Регистрация не была пройдена"
+        assert message_text == "User created", "Регистрация не была пройдена"
 
-    def email_field_is_not_present(self, browser, timeout=3):  # падает
+    def email_field_is_not_present(self, browser, timeout=3):  #
         try:
             shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
             email_input = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.EMAIL)
@@ -98,22 +103,22 @@ class LoginPage(BasePage):
             return True
         return False
 
-    def should_be_added_fields_password_and_confirm_password(self, browser):
+    def should_be_added_fields_password_and_confirm_password(self, browser):  # должны добавиться 2 поля password
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         button_sign_up = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.SIGN_UP_BUTTON)
         button_sign_up.click()
         self.should_be_added_field_password(browser)
         self.should_be_added_field_confirm_password(browser)
 
-    def should_be_added_field_password(self, browser):
+    def should_be_added_field_password(self, browser):  # должно добавиться поле password
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         assert shadow_dom.find_element_by_css_selector(RegistrationPageLocators.PASSWORD_1), "Поле password1 не появилось"
 
-    def should_be_added_field_confirm_password(self, browser):
+    def should_be_added_field_confirm_password(self, browser):  # должно добавиться поле  confirm password
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         assert shadow_dom.find_element_by_css_selector(RegistrationPageLocators.PASSWORD_1), "Поле password2 не появилось"
 
-    def success_registration(self, sponsor_id, first_name, last_name, password, browser):
+    def success_registration(self, sponsor_id, first_name, last_name, password, browser):  # регистрация после изменения полей
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         sponsor_id_input = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.SPONSOR_ID)
         first_name_input = shadow_dom.find_element_by_css_selector(RegistrationPageLocators.FIRST_NAME)
@@ -129,7 +134,7 @@ class LoginPage(BasePage):
         button_register.click()
         time.sleep(3)
 
-    def dashboard_should_be_open(self):  # придумать другую проверку
+    def dashboard_should_be_open(self, browser):  # должен открыться Dashboard
+        time.sleep(3)
         dashboard_label = self.browser.find_element_by_css_selector(DashboardPageLocators.DASHBOARD_LABEL)
         assert dashboard_label.text == "DASHBOARD", f"заголовок h2 не найден или найден с текстом {dashboard_label.text}"
-

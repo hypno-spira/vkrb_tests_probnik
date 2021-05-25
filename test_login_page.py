@@ -1,114 +1,132 @@
+import time
+import allure
+import pytest
 from .pages.login_page import LoginPage
 from .pages.global_settings_page import GlobalSettingsPage
 from .pages.profile_field_settings_page import ProfileFieldSettingsPage
 from .pages.admin_personal_account_settings_page import AdminPersonalAccountSettingsPage
-from .pages.online_order_page import OnlineOrderPage
-import pytest
-import time
-import allure
+from .pages.links import Links
+from .pages.testdata import CorrectData, IncorrectData
 from allure_commons.types import AttachmentType
 
 
-@allure.feature('authorization')
-@allure.story("Авторизация пользователя с корректными данными")
+@pytest.mark.auth1
+@allure.feature("Авторизация в OnlineOffice")
+@allure.story("№1. Авторизация пользователя с корректными данными")
 @allure.severity("critical")
-def test_guest_can_sign_in_with_valid_data(browser):  # 1. авторизация с корректными данными
-    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
-    page = LoginPage(browser, link)
+def test_guest_can_sign_in_with_valid_data(browser):
+    page = LoginPage(browser, Links.DASHBOARD_LINK)
     page.open()
-    email, password = "user3@example.com", "password_0"
+    email = CorrectData.EMAIL_ID3
+    password = CorrectData.PASSWORD
     page.sign_in_to_site(email, password, browser)
-    page.should_be_username_logo_in_the_header(browser)
+    page.dashboard_should_be_open(browser)
+    with allure.step("Dashboard should be open"):
+        allure.attach(browser.get_screenshot_as_png(), name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@allure.feature('authorization')
-@allure.story("Авторизация пользователя с неверным паролем")
+@pytest.mark.auth2
+@allure.feature("Авторизация в OnlineOffice")
+@allure.story("№2. Авторизация пользователя с неверным паролем")
 @allure.severity("critical")
-def test_guest_cant_sign_in_with_invalid_password(browser):  # 2. авторизация с неверным паролем
-    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
-    page = LoginPage(browser, link)
+def test_guest_cant_sign_in_with_invalid_password(browser):
+    page = LoginPage(browser, Links.DASHBOARD_LINK)
     page.open()
-    email, password = "user3@example.com", "password_012345"
+    email = CorrectData.EMAIL_ID3
+    password = IncorrectData.PASSWORD
     page.sign_in_to_site(email, password, browser)
-    with allure.step("Делаем скриншот"):
-        allure.attach(browser.get_screenshot_as_png(), name="Screenshot wrong password",
-                      attachment_type=AttachmentType.PNG)
     page.should_be_message_about_wrong_password(browser)
+    with allure.step("Should be message wrong password"):
+        allure.attach(browser.get_screenshot_as_png(), name="Wrong password message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@allure.feature('registration')
-@allure.story("Регистрация пользователя с неверным sponsor id")
+@pytest.mark.reg1
+@allure.feature("Регистрация в OnlineOffice")
+@allure.story("№3. Регистрация пользователя с неверно указанным Sponsor ID")
 @allure.severity("critical")
-def test_guest_cant_register_with_invalid_sponsor_id(browser):  # 3. регистрация с неверным спонсор айди
-    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
-    page = LoginPage(browser, link)
+def test_guest_cant_register_with_invalid_sponsor_id(browser):
+    page = LoginPage(browser, Links.DASHBOARD_LINK)
     page.open()
-    sponsor_id, first_name, last_name, email = "0900", "Ivan", "Ivanov", "user10@example.com"
+    sponsor_id = IncorrectData.SPONSOR_ID
+    first_name = CorrectData.FIRST_NAME
+    last_name = CorrectData.LAST_NAME
+    email = CorrectData.EMAIL_FOR_REG
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
     page.should_be_message_about_wrong_sponsor_id(browser, sponsor_id)
+    with allure.step("Should be message wrong sponsor id"):
+        allure.attach(browser.get_screenshot_as_png(), name="Wrong sponsor id message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-
-@allure.feature('registration')
-@allure.story("Регистрация пользователя с уже существующим email")
+@pytest.mark.reg2
+@allure.feature("Регистрация в OnlineOffice")
+@allure.story("№4. Регистрация пользователя с указанием уже существующего email")
 @allure.severity("critical")
-def test_guest_cant_register_with_an_existing_email(browser):  # 4. регистрация с уже сущ. емейлом
-    link = "https://dev-vkhvorostov.onlineoffice.pro/ru-RU"
-    page = LoginPage(browser, link)
+def test_guest_cant_register_with_an_existing_email(browser):
+    page = LoginPage(browser, Links.DASHBOARD_LINK)
     page.open()
-    sponsor_id, first_name, last_name, email = "2", "Ivvvan", "Ivanov", "user4@example.com"
+    sponsor_id = CorrectData.SPONSOR_ID
+    first_name = CorrectData.FIRST_NAME
+    last_name = CorrectData.LAST_NAME
+    email = CorrectData.EMAIL_ID3
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
-    page.should_be_message_email_already_exists(browser)  # доделать
+    page.should_be_message_email_already_exists(browser)
+    with allure.step("Should be message email already exist"):
+        allure.attach(browser.get_screenshot_as_png(), name="Email already exist message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@allure.feature('registration')
-@allure.story("Успешная регистрация пользователя")
+@pytest.mark.reg3
+@allure.feature("Регистрация в OnlineOffice")
+@allure.story("№5. Успешная регистрация пользователя")
 @allure.severity("critical")
-def test_guest_can_register_with_valid_data(browser):  # 5. успешная регистрация
-    link = "https://dev-vkhvorostov.onlineoffice.pro/ru-RU"
-    page = LoginPage(browser, link)
+def test_guest_can_register_with_valid_data(browser):
+    page = LoginPage(browser, Links.DASHBOARD_LINK)
     page.open()
-    sponsor_id, first_name, last_name, email = "2", "Marina", "Ivanova", "mukeuy@my.com"
+    sponsor_id = CorrectData.SPONSOR_ID
+    first_name = CorrectData.FIRST_NAME
+    last_name = CorrectData.LAST_NAME
+    email = CorrectData.EMAIL_FOR_REG
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
-    page.should_be_message_about_registration_confirmation_via_email(browser)  # доделать
+    page.should_be_message_about_registration_confirmation_via_email(browser)
+    with allure.step("Should be message User created"):
+        allure.attach(browser.get_screenshot_as_png(), name="User created message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@allure.feature("authorization")
+@pytest.mark.idaslog
+@allure.feature("Тест ID as Login")
 @allure.story("Тест ID as Login")
-@allure.severity("critical")
+@allure.severity("normal")
 def test_id_as_login(browser):
-    link = "https://dev-vkhvorostov.mlmsoft.com/admin/settings/global-settings"
-    global_settings_page = GlobalSettingsPage(browser, link)
-    global_settings_page.open()
-    email, password = "admin@mlm-soft.com", "9UA27VF2W2Bwn7Jo"
-    global_settings_page.sign_in_configurator(email, password)
-    global_settings_page.select_login_type__id_as_login()
-    global_settings_page.select_password_creation_type__by_user()
-    global_settings_page.save_changes_to_global_settings()
+    page = GlobalSettingsPage(browser, Links.GLOBAL_SETTINGS_LINK)  # переход к настройкам Global Settings
+    page.open()
+    email = CorrectData.ADMIN_EMAIL
+    password = CorrectData.ADMIN_PASSWORD
+    page.sign_in_configurator(email, password)
+    page.select_login_type__id_as_login()
+    page.select_password_creation_type__by_user()
+    page.save_changes_to_global_settings()
     time.sleep(3)
-    # переход к настройкам Profile Fields
-    link = "https://dev-vkhvorostov.mlmsoft.com/admin/accounts/profile-fields"
-    profile_field_settings_page = ProfileFieldSettingsPage(browser, link)
-    profile_field_settings_page.open()
-    profile_field_settings_page.uncheck_email_field()
+    page = ProfileFieldSettingsPage(browser, Links.PROFILE_FIELDS_SETTINGS_LINK)  # переход к настройкам Profile Fields
+    page.open()
+    page.uncheck_email_field()
     time.sleep(3)
-    # переход к настройкам admin/themes/monarch
-    link = "https://dev-vkhvorostov.onlineoffice.pro/admin/themes/monarch"
-    admin_personal_account_settings_page = AdminPersonalAccountSettingsPage(browser, link)
-    admin_personal_account_settings_page.open()
-    admin_personal_account_settings_page.sign_in_admin_cabinet(email, password)
-    admin_personal_account_settings_page.select_login_validation_type__account_id()
-    admin_personal_account_settings_page.save_changes_to_admin_cabinet()
-    # переход к странице входа-регистрации
-    link = "https://dev-vkhvorostov.onlineoffice.pro/en-US"
-    login_page = LoginPage(browser, link)
-    login_page.open()
-    login_page.should_be_added_fields_password_and_confirm_password(browser)
-    # login_page.email_field_is_not_present(browser) - дописать рабочий метод или удалить
-    sponsor_id, first_name, last_name, password = "2", "Antony", "Petrov", "AwsEgyudcjdigY65Hfuf764"
-    login_page.success_registration(sponsor_id, first_name, last_name, password, browser)
-    time.sleep(10)  # без явного ожидания страница не успевает загрузиться и тест падает
-    login_page.dashboard_should_be_open()
+    page = AdminPersonalAccountSettingsPage(browser, Links.ADMIN_PERSONAL_ACCOUNT_SETTINGS_LINK)  # переход к настройкам admin/themes/monarch
+    page.open()
+    page.sign_in_admin_cabinet(email, password)
+    page.select_login_validation_type__account_id()
+    page.save_changes_to_admin_cabinet()
+    page = LoginPage(browser, Links.DASHBOARD_LINK)  # переход к странице входа-регистрации
+    page.open()
+    page.should_be_added_fields_password_and_confirm_password(browser)
+    with allure.step("Should be added password fields"):
+        allure.attach(browser.get_screenshot_as_png(), name="Password fields Screenshot", attachment_type=AttachmentType.PNG)
+    # page.email_field_is_not_present(browser)
+    sponsor_id = CorrectData.SPONSOR_ID
+    first_name = CorrectData.FIRST_NAME
+    last_name = CorrectData.LAST_NAME
+    password = CorrectData.PASSWORD_FOR_REG
+    page.success_registration(sponsor_id, first_name, last_name, password, browser)
+    time.sleep(10)  # без явного ожидания страница не успевает загрузиться
+    page.dashboard_should_be_open(browser)
+    with allure.step("Dashboard should be open"):
+        allure.attach(browser.get_screenshot_as_png(), name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
     time.sleep(3)
-
-
