@@ -10,7 +10,8 @@ from .pages.testdata import CorrectData, IncorrectData
 from allure_commons.types import AttachmentType
 
 
-@pytest.mark.auth1
+@pytest.mark.authorization
+@pytest.mark.authorization_1
 @allure.feature("Авторизация в OnlineOffice")
 @allure.story("№1. Авторизация пользователя с корректными данными")
 @allure.severity("critical")
@@ -25,7 +26,8 @@ def test_guest_can_sign_in_with_valid_data(browser):
         allure.attach(browser.get_screenshot_as_png(), name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.auth2
+@pytest.mark.authorization
+@pytest.mark.authorization_2
 @allure.feature("Авторизация в OnlineOffice")
 @allure.story("№2. Авторизация пользователя с неверным паролем")
 @allure.severity("critical")
@@ -40,7 +42,8 @@ def test_guest_cant_sign_in_with_invalid_password(browser):
         allure.attach(browser.get_screenshot_as_png(), name="Wrong password message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.reg1
+@pytest.mark.registration
+@pytest.mark.registration_1
 @allure.feature("Регистрация в OnlineOffice")
 @allure.story("№3. Регистрация пользователя с неверно указанным Sponsor ID")
 @allure.severity("critical")
@@ -57,7 +60,8 @@ def test_guest_cant_register_with_invalid_sponsor_id(browser):
         allure.attach(browser.get_screenshot_as_png(), name="Wrong sponsor id message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.reg2
+@pytest.mark.registration
+@pytest.mark.registration_2
 @allure.feature("Регистрация в OnlineOffice")
 @allure.story("№4. Регистрация пользователя с указанием уже существующего email")
 @allure.severity("critical")
@@ -74,7 +78,8 @@ def test_guest_cant_register_with_an_existing_email(browser):
         allure.attach(browser.get_screenshot_as_png(), name="Email already exist message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.reg3
+@pytest.mark.registration
+@pytest.mark.registration_3
 @allure.feature("Регистрация в OnlineOffice")
 @allure.story("№5. Успешная регистрация пользователя")
 @allure.severity("critical")
@@ -91,7 +96,7 @@ def test_guest_can_register_with_valid_data(browser):
         allure.attach(browser.get_screenshot_as_png(), name="User created message Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.idaslog
+@pytest.mark.id_as_login
 @allure.feature("Тест ID as Login")
 @allure.story("Тест ID as Login")
 @allure.severity("normal")

@@ -7,7 +7,7 @@ import allure
 from allure_commons.types import AttachmentType
 
 
-@pytest.mark.price
+@pytest.mark.total_price
 @allure.feature("Подсчет суммы товаров в корзине")
 @allure.story("№7. Подсчет суммы товаров в корзине")
 @allure.severity("critical")
@@ -24,7 +24,8 @@ def test_quantity_and_total_price_of_the_goods_in_the_cart(browser):
     page.should_be_correct_total_price_in_the_cart(browser)
 
 
-@pytest.mark.purchase1
+@pytest.mark.purchase
+@pytest.mark.purchase_1
 @allure.feature("Совершение покупки в онлайн-заказе")
 @allure.story("№8. Успешное совершение покупки")
 @allure.severity("critical")
@@ -54,7 +55,8 @@ def test_successful_purchase(browser):
         allure.attach(browser.get_screenshot_as_png(), name="Admin invoices Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.purchase2
+@pytest.mark.purchase
+@pytest.mark.purchase_2
 @allure.feature("Совершение покупки в онлайн-заказе")
 @allure.story("№9. Неуспешное совершение покупки")
 @allure.severity("critical")
@@ -84,7 +86,7 @@ def test_unsuccessful_purchase(browser):
         allure.attach(browser.get_screenshot_as_png(), name="Admin invoices Screenshot", attachment_type=AttachmentType.PNG)
 
 
-@pytest.mark.transfer
+@pytest.mark.transfer_wallet
 @allure.feature("Перевод с одного бонусного кошелька на другой")
 @allure.story("№10. Перевод с одного бонусного кошелька на другой")
 @allure.severity("normal")
