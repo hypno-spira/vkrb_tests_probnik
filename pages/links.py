@@ -10,3 +10,4 @@ class Links(BasePage):
     ORDER_HISTORY_LINK = "https://dev-vkhvorostov.onlineoffice.pro/en-US/order/order-history"
     ADMIN_INVOICE_LINK = "https://dev-vkhvorostov.mlmsoft.com/finance/invoice"
     WALLET_TRANSFER_LINK = "https://dev-vkhvorostov.onlineoffice.pro/en-US/wallet/my-wallet-transfer"
+    AUTH_RU = "https://dev-vkhvorostov.onlineoffice.pro/ru-RU"

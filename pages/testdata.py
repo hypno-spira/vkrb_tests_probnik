@@ -4,7 +4,9 @@ import time
 
 class CorrectData(BasePage):
     EMAIL_ID3 = "user3@example.com"
+    EMAIL_ID4 = "user4@example.com"
     EMAIL_ID5 = "user5@example.com"
+    EMAIL_ID6 = "user6@example.com"
     PASSWORD = "password_0"
     FIRST_NAME = "Ivan"
     LAST_NAME = "Ivanov"

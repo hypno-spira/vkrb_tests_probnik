@@ -3,11 +3,14 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from .links import Links
 from .locators import CabinetLocators
 from .locators import AuthorizationPageLocators
 from .locators import DashboardPageLocators
 from .locators import RegistrationPageLocators
 import re
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 
 
 class LoginPage(BasePage):
@@ -104,11 +107,37 @@ class LoginPage(BasePage):
         return False
 
     def should_be_added_fields_password_and_confirm_password(self, browser):  # должны добавиться 2 поля password
+        time.sleep(2)
+        self.delete_cache(browser)
+        online_order_page = LoginPage(browser, Links.AUTH_RU)
+        online_order_page.open()
+        time.sleep(2)
+        online_order_page = LoginPage(browser, Links.DASHBOARD_LINK) # смена языка туда и обратно
+        online_order_page.open()
+        time.sleep(2)
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
         button_sign_up = shadow_dom.find_element_by_css_selector(AuthorizationPageLocators.SIGN_UP_BUTTON)
         button_sign_up.click()
         self.should_be_added_field_password(browser)
         self.should_be_added_field_confirm_password(browser)
+
+    def delete_cache(self, browser):
+        browser.execute_script("window.open('');")
+        time.sleep(2)
+        browser.switch_to.window(browser.window_handles[-1])
+        time.sleep(2)
+        browser.get('chrome://settings/clearBrowserData')  # for old chromedriver versions use cleardriverData
+        time.sleep(2)
+        actions = ActionChains(browser)
+        actions.send_keys(Keys.TAB * 3 + Keys.DOWN * 3)  # send right combination
+        actions.perform()
+        time.sleep(2)
+        actions = ActionChains(browser)
+        actions.send_keys(Keys.TAB * 4 + Keys.ENTER)  # confirm
+        actions.perform()
+        time.sleep(5)  # wait some time to finish
+        browser.close()  # close this tab
+        browser.switch_to.window(browser.window_handles[0])  # switch back
 
     def should_be_added_field_password(self, browser):  # должно добавиться поле password
         shadow_dom = self.expand_shadow_element(browser.find_element_by_tag_name(AuthorizationPageLocators.SHADOW_TAG))
@@ -135,6 +164,7 @@ class LoginPage(BasePage):
         time.sleep(3)
 
     def dashboard_should_be_open(self, browser):  # должен открыться Dashboard
-        time.sleep(3)
+        time.sleep(7)
         dashboard_label = self.browser.find_element_by_css_selector(DashboardPageLocators.DASHBOARD_LABEL)
-        assert dashboard_label.text == "DASHBOARD", f"заголовок h2 не найден или найден с текстом {dashboard_label.text}"
+        assert dashboard_label.text == "DASHBOARD", \
+            f"заголовок h2 не найден или найден с текстом {dashboard_label.text}"

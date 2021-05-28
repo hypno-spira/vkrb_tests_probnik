@@ -14,13 +14,14 @@ from allure_commons.types import AttachmentType
 def test_quantity_and_total_price_of_the_goods_in_the_cart(browser):
     page = OnlineOrderPage(browser, Links.ONLINE_ORDER_LINK)
     page.open()
-    email = CorrectData.EMAIL_ID3
+    email = CorrectData.EMAIL_ID4
     password = CorrectData.PASSWORD
     page.sign_in(email, password, browser)
     page.add_three_items_to_cart(browser)
     page.should_be_3_on_the_cart_icon(browser)
     with allure.step("Should be 3 on the cart icon"):
-        allure.attach(browser.get_screenshot_as_png(), name="Cart icon Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Cart icon Screenshot", attachment_type=AttachmentType.PNG)
     page.should_be_correct_total_price_in_the_cart(browser)
 
 
@@ -43,7 +44,8 @@ def test_successful_purchase(browser):
     new_order_id = online_order_page.should_be_new_order_in_order_history(last_order_id, browser)
     online_order_page.new_order_should_be_successful(browser)
     with allure.step("Should be DONE new order in Order history "):
-        allure.attach(browser.get_screenshot_as_png(), name="Order history Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Order history Screenshot", attachment_type=AttachmentType.PNG)
     invoices_page = AdminInvoicesPage(browser, Links.ADMIN_INVOICE_LINK)  # переход к admin invoices
     invoices_page.open()
     email = CorrectData.ADMIN_EMAIL
@@ -52,7 +54,8 @@ def test_successful_purchase(browser):
     invoices_page.new_order_should_be_in_first_line(new_order_id)
     invoices_page.new_order_should_be_successful()
     with allure.step("Should be DONE new order in admin invoices"):
-        allure.attach(browser.get_screenshot_as_png(), name="Admin invoices Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(), name="Admin invoices Screenshot",
+                      attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.purchase
@@ -74,7 +77,8 @@ def test_unsuccessful_purchase(browser):
     new_order_id = online_order_page.should_be_new_order_in_order_history(last_order_id, browser)
     online_order_page.new_order_should_be_unsuccessful(browser)
     with allure.step("Should be ERROR new order in Order history "):
-        allure.attach(browser.get_screenshot_as_png(), name="Order history Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Order history Screenshot", attachment_type=AttachmentType.PNG)
     invoices_page = AdminInvoicesPage(browser, Links.ADMIN_INVOICE_LINK)  # переход к admin invoices
     invoices_page.open()
     email = CorrectData.ADMIN_EMAIL
@@ -83,7 +87,8 @@ def test_unsuccessful_purchase(browser):
     invoices_page.new_order_should_be_in_first_line(new_order_id)
     invoices_page.new_order_should_be_unsuccessful()
     with allure.step("Should be ERROR new order in admin invoices"):
-        allure.attach(browser.get_screenshot_as_png(), name="Admin invoices Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Admin invoices Screenshot", attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.transfer_wallet
@@ -104,7 +109,8 @@ def test_transfer_wallet(browser):
     page.making_a_transfer(browser)
     page.should_be_green_message_after_transfer(browser)
     with allure.step("Should be message Successful transfer"):
-        allure.attach(browser.get_screenshot_as_png(), name="Successful transfer Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(), name="Successful transfer Screenshot",
+                      attachment_type=AttachmentType.PNG)
     page.sender_bonus_wallet_should_be_less_after_transfer(sender_bonus_wallet_before_transfer, browser)
     page.logout(browser)
     page.sign_in(email2, password, browser)

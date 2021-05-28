@@ -23,7 +23,8 @@ def test_guest_can_sign_in_with_valid_data(browser):
     page.sign_in_to_site(email, password, browser)
     page.dashboard_should_be_open(browser)
     with allure.step("Dashboard should be open"):
-        allure.attach(browser.get_screenshot_as_png(), name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.authorization
@@ -39,7 +40,8 @@ def test_guest_cant_sign_in_with_invalid_password(browser):
     page.sign_in_to_site(email, password, browser)
     page.should_be_message_about_wrong_password(browser)
     with allure.step("Should be message wrong password"):
-        allure.attach(browser.get_screenshot_as_png(), name="Wrong password message Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Wrong password message Screenshot", attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.registration
@@ -57,7 +59,8 @@ def test_guest_cant_register_with_invalid_sponsor_id(browser):
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
     page.should_be_message_about_wrong_sponsor_id(browser, sponsor_id)
     with allure.step("Should be message wrong sponsor id"):
-        allure.attach(browser.get_screenshot_as_png(), name="Wrong sponsor id message Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Wrong sponsor id message Screenshot", attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.registration
@@ -75,7 +78,8 @@ def test_guest_cant_register_with_an_existing_email(browser):
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
     page.should_be_message_email_already_exists(browser)
     with allure.step("Should be message email already exist"):
-        allure.attach(browser.get_screenshot_as_png(), name="Email already exist message Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Email already exist message Screenshot", attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.registration
@@ -93,7 +97,8 @@ def test_guest_can_register_with_valid_data(browser):
     page.register_on_the_site(sponsor_id, first_name, last_name, email, browser)
     page.should_be_message_about_registration_confirmation_via_email(browser)
     with allure.step("Should be message User created"):
-        allure.attach(browser.get_screenshot_as_png(), name="User created message Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="User created message Screenshot", attachment_type=AttachmentType.PNG)
 
 
 @pytest.mark.id_as_login
@@ -123,15 +128,16 @@ def test_id_as_login(browser):
     page.open()
     page.should_be_added_fields_password_and_confirm_password(browser)
     with allure.step("Should be added password fields"):
-        allure.attach(browser.get_screenshot_as_png(), name="Password fields Screenshot", attachment_type=AttachmentType.PNG)
-    # page.email_field_is_not_present(browser)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Password fields Screenshot", attachment_type=AttachmentType.PNG)
     sponsor_id = CorrectData.SPONSOR_ID
     first_name = CorrectData.FIRST_NAME
     last_name = CorrectData.LAST_NAME
     password = CorrectData.PASSWORD_FOR_REG
     page.success_registration(sponsor_id, first_name, last_name, password, browser)
-    time.sleep(10)  # без явного ожидания страница не успевает загрузиться
+    time.sleep(10)
     page.dashboard_should_be_open(browser)
     with allure.step("Dashboard should be open"):
-        allure.attach(browser.get_screenshot_as_png(), name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
+        allure.attach(browser.get_screenshot_as_png(),
+                      name="Dashboard Screenshot", attachment_type=AttachmentType.PNG)
     time.sleep(3)

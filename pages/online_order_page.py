@@ -50,9 +50,12 @@ class OnlineOrderPage(BasePage):
         cart_button = shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.CART_BUTTON)
         cart_button.click()
         time.sleep(3)
-        total_price_in_the_cart_text = (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.CART_PRICE).text)
+        total_price_in_the_cart_text = \
+            (shadow_dom.find_element_by_css_selector(OnlineOrderPageLocators.CART_PRICE).text)
         total_price_in_the_cart = float(total_price_in_the_cart_text)
-        assert total_price_of_items == total_price_in_the_cart, f"Суммы не совпадают, общая сумма товаров = {total_price_of_items}, сумма товаров в корзине = {total_price_in_the_cart}"
+        assert total_price_of_items == total_price_in_the_cart, \
+            f"Суммы не совпадают, общая сумма товаров = {total_price_of_items}, " \
+            f"сумма товаров в корзине = {total_price_in_the_cart}"
 
     def price_text_to_float(self, text):   # перевод строки в вещественное число
         price = float("".join(filter(lambda d: str.isdigit(d) or d == '.', text)))
