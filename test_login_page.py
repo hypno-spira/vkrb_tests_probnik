@@ -101,6 +101,7 @@ def test_guest_can_register_with_valid_data(browser):
                       name="User created message Screenshot", attachment_type=AttachmentType.PNG)
 
 
+@pytest.mark.xfail
 @pytest.mark.id_as_login
 @allure.feature("Тест ID as Login")
 @allure.story("Тест ID as Login")
